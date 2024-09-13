@@ -5,48 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First Page</title>
     <style>
-html, body {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.box {
-    width: 800px;
-    height: 300px;
-    background-color: #f1f1f1;
-    text-align: center;
-    padding: 20px;
-    border-radius: 10px;
-}
+        .box {
+            width: 800px;
+            height: auto;
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-}
+        img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
 
-button {
-    padding: 10px 20px;
-    background-color: #121b2d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-top: 20px;
-    cursor: pointer;
-}
+        h1 {
+            font-size: 24px;
+            margin-top: 20px;
+        }
 
-button:hover {
-    background-color: #444;
-}
+        button {
+            padding: 10px 20px;
+            background-color: #121b2d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
 
-button a {
-    color: white;
-    text-decoration: none;
-    display: block;
-}
+        button:hover {
+            background-color: #444;
+        }
+
+        button a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .box {
+                width: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .box {
+                width: 400px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            img {
+                width: 80px;
+                height: 80px;
+            }
+
+            button {
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .box {
+                width: 100%;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            img {
+                width: 60px;
+                height: 60px;
+            }
+
+            button {
+                padding: 6px 12px;
+            }
+        }
     </style>
 </head>
 <body>
