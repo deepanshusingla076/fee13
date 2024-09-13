@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+    <title>Login Page</title>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="form-container admin" id="admin-form">
+            <form id="admin-login-form">
+                <h1>Admin Login</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your username and password</span>
+                <input type="text" id="admin-username" placeholder="Name" required>
+                <input type="password" id="admin-password" placeholder="Password" required>
+                <a href="#">Forgot Your Password?</a>
+                <button type="submit">Admin Login</button>
+            </form>
+        </div>
+        <div class="form-container employee hidden" id="employee-form">
+            <form id="employee-login-form">
+                <h1>Employee Login</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your username and password</span>
+                <input type="text" id="employee-username" placeholder="Name" required>
+                <input type="password" id="employee-password" placeholder="Password" required>
+                <a href="#">Forgot Your Password?</a>
+                <button type="submit">Employee Login</button>
+            </form>
+        </div>
+
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Admin!</h1>
+                    <p>Enter your credentials to access admin features</p>
+                    <button class="toggle-button" id="show-admin-form">Admin Login</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Welcome Employee!</h1>
+                    <p>Enter your credentials to access employee features</p>
+                    <button class="toggle-button" id="show-employee-form">Employee Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+
+</html>

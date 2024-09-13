@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Assignment Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 1.5px;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .chart-container canvas {
+            width: 150px; /* Adjusted size */
+            height: 150px; /* Adjusted size */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            font-size: 1.1rem;
+        }
+
+        table, th, td {
+            border: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            padding: 14px;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .green {
+            background-color: #c8e6c9;
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .red {
+            background-color: #ffcdd2;
+            border-radius: 4px;
+            padding: 6px 8px;
+            font-weight: bold;
+            color: #c62828;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Employee Assignment Dashboard</h1>
+        <div class="chart-container">
+            <canvas id="assignmentPieChart"></canvas>
+            <canvas id="assignmentLineChart"></canvas>
+        </div>
+        <div id="assignment-info">
+            <h2>Assignment Details</h2>
+            <table id="assignment-table">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Assignment Completion (%)</th>
+                        <th>Completion Date</th>
+                        <th>Time Taken (hours)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const assignments = [
+            { employee: 'Alice', completion: 90, date: '2024-09-10', time: 5 },
+            { employee: 'Bob', completion: 70, date: '2024-09-12', time: 7 },
+            { employee: 'Charlie', completion: 80, date: '2024-09-15', time: 6 },
+            { employee: 'David', completion: 60, date: '2024-09-18', time: 8 },
+            { employee: 'Eva', completion: 85, date: '2024-09-20', time: 5.5 },
+            { employee: 'Frank', completion: 75, date: '2024-09-22', time: 6.5 }
+        ];
+
+        function generateTable() {
+            const tableBody = document.querySelector('#assignment-table tbody');
+            tableBody.innerHTML = assignments.map(assignment => `
+                <tr>
+                    <td>${assignment.employee}</td>
+                    <td>${assignment.completion}%</td>
+                    <td>${assignment.date}</td>
+                    <td>${assignment.time}</td>
+                </tr>
+            `).join('');
+        }
+
+        function generateCharts() {
+            const ctxPie = document.getElementById('assignmentPieChart').getContext('2d');
+            new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: assignments.map(a => a.employee),
+                    datasets: [{
+                        label: 'Assignment Completion',
+                        data: assignments.map(a => a.completion),
+                        backgroundColor: ['#4caf50', '#f44336', '#2196f3', '#ff9800', '#9c27b0', '#00bcd4'],
+                    }]
+                }
+            });
+
+            const ctxLine = document.getElementById('assignmentLineChart').getContext('2d');
+            new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: assignments.map(a => a.employee),
+                    datasets: [{
+                        label: 'Time Taken (hours)',
+                        data: assignments.map(a => a.time),
+                        borderColor: '#007bff',
+                        fill: false,
+                    }]
+                }
+            });
+        }
+
+        // Initialize the table and charts
+        generateTable();
+        generateCharts();
+    </script>
+</body>
+
+</html>

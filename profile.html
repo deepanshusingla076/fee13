@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Profile</title>
+    <style>
+        /* Basic styling for the form */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #3CBC8D;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #2E9E6D;
+        }
+    </style>
+</head>
+<body>
+    <!-- Profile -->
+    <section id="profile" class="section">
+        <h2>Employee Profile</h2>
+        <form>
+            <label for="emp-name">Employee Name:</label>
+            <input type="text" id="emp-name" placeholder="Enter employee name">
+            <label for="emp-id">Employee ID:</label>
+            <input type="text" id="emp-id" placeholder="Enter employee ID">
+            <label for="manager-name">Manager Name:</label>
+            <input type="text" id="manager-name" placeholder="Enter manager name">
+            <label for="team-leader">Team Leader Name:</label>
+            <input type="text" id="team-leader" placeholder="Enter team leader name">
+            <label for="contact">Contact Number:</label>
+            <input type="text" id="contact" placeholder="Enter contact number">
+            <label for="joining-date">Date of Joining:</label>
+            <input type="date" id="joining-date">
+            <button type="submit">Save</button>
+        </form>
+    </section>
+</body>
+</html>

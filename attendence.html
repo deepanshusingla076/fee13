@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+    color: #007bff;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing: 1.5px;
+}
+
+h2 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.team-selector {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.team-selector ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.team-selector li {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.2);
+}
+
+.team-selector li:hover {
+    background: linear-gradient(135deg, #0056b3, #00448a);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px rgba(0, 123, 255, 0.4);
+}
+
+.attendance-content {
+    display: none;
+    padding-top: 20px;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Ensures 7 columns for each day of the week */
+    gap: 1px;
+    margin: 20px 0;
+    background-color: #e0e0e0;
+    padding: 10px;
+}
+
+.calendar-header {
+    display: contents; /* Ensures headers are part of the same grid layout */
+}
+
+.day-header {
+    padding: 10px;
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.day {
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.calendar .green {
+    background-color: #c8e6c9;
+}
+
+.calendar .red {
+    background-color: #ffcdd2;
+}
+
+.calendar .blue {
+    background-color: #bbdefb;
+}
+
+.members-info {
+    margin-top: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    font-size: 1.1rem;
+}
+
+table, th, td {
+    border: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 14px;
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.green {
+    background-color: #c8e6c9;
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.red {
+    background-color: #ffcdd2;
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-weight: bold;
+    color: #c62828;
+}
+
+.chart-container {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    position: relative;
+}
+
+.chart-container canvas {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+}
+
+#attendancePieChart {
+    margin-top: -20px;
+}
+
+@media screen and (max-width: 768px) {
+    .chart-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .team-selector ul {
+        flex-direction: column;
+    }
+
+    .calendar {
+        grid-template-columns: repeat(7, 1fr); /* Keeps 7 columns on smaller screens */
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <div class="team-selector">
+            <h2>Select Team</h2>
+            <ul id="team-list">
+                <li onclick="showTeam('Team A')">Team A</li>
+                <li onclick="showTeam('Team B')">Team B</li>
+                <li onclick="showTeam('Team C')">Team C</li>
+            </ul>
+        </div>
+        <div id="attendance-content" class="attendance-content">
+            <h2 id="team-title">Attendance for: <span id="current-team"></span></h2>
+            <div class="calendar" id="calendar"></div>
+            <div class="members-info" id="members-info"></div>
+            <div class="chart-container">
+                <canvas id="attendancePieChart"></canvas>
+                <canvas id="attendanceLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+       const teamMembers = {
+    "Team A": [
+        { name: "Alice", attendance: [1, 1, 0, 1, 1, 0, 1] },
+        { name: "Bob", attendance: [1, 0, 1, 1, 0, 1, 1] },
+    ],
+    "Team B": [
+        { name: "Charlie", attendance: [1, 1, 1, 0, 1, 1, 0] },
+        { name: "David", attendance: [0, 0, 1, 1, 1, 1, 1] },
+    ],
+    "Team C": [
+        { name: "Eva", attendance: [1, 1, 1, 1, 0, 1, 1] },
+        { name: "Frank", attendance: [1, 0, 1, 1, 1, 0, 1] },
+    ],
+};
+
+function showTeam(teamName) {
+    document.getElementById("current-team").innerText = teamName;
+    document.getElementById("attendance-content").style.display = "block";
+    generateCalendar(teamName);
+    generateMembersTable(teamName);
+    generateCharts(teamName);
+}
+
+function generateCalendar(teamName) {
+    const calendarDiv = document.getElementById("calendar");
+    calendarDiv.innerHTML = ""; // Clear previous calendar
+
+    const daysInMonth = 30; // Full month display
+    const firstDayOfMonth = new Date(2024, 8, 1).getDay(); // Start from September 2024, adjust as needed
+
+    // Add header row for days of the week
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const headerRow = document.createElement("div");
+    headerRow.className = "calendar-header";
+    daysOfWeek.forEach(day => {
+        const dayHeader = document.createElement("div");
+        dayHeader.className = "day-header";
+        dayHeader.innerText = day;
+        headerRow.appendChild(dayHeader);
+    });
+    calendarDiv.appendChild(headerRow);
+
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < firstDayOfMonth; i++) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.className = "day";
+        calendarDiv.appendChild(emptyDiv);
+    }
+
+    // Add days of the month
+    for (let i = 1; i <= daysInMonth; i++) {
+        const dayDiv = document.createElement("div");
+        dayDiv.className = "day";
+        dayDiv.innerText = i;
+
+        // Randomly assigning attendance data (green for present, red for absent, blue for holiday)
+        const random = Math.random();
+        if (random < 0.7) {
+            dayDiv.classList.add("green");
+        } else if (random < 0.9) {
+            dayDiv.classList.add("red");
+        } else {
+            dayDiv.classList.add("blue");
+        }
+
+        calendarDiv.appendChild(dayDiv);
+    }
+
+    // Add empty cells for days after the end of the month to complete the week
+    const totalDays = firstDayOfMonth + daysInMonth;
+    const remainingDays = (7 - (totalDays % 7)) % 7;
+    for (let i = 0; i < remainingDays; i++) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.className = "day";
+        calendarDiv.appendChild(emptyDiv);
+    }
+}
+
+function generateMembersTable(teamName) {
+    const membersInfoDiv = document.getElementById("members-info");
+    membersInfoDiv.innerHTML = ""; // Clear previous members info
+
+    const members = teamMembers[teamName];
+    let tableHTML = `<table><tr><th>Member</th><th>Attendance</th><th>Attendance %</th></tr>`;
+
+    members.forEach(member => {
+        const attendanceDays = member.attendance.length;
+        const presentDays = member.attendance.filter(day => day === 1).length;
+        const attendancePercentage = ((presentDays / attendanceDays) * 100).toFixed(2);
+
+        tableHTML += `<tr>
+            <td>${member.name}</td>
+            <td>${presentDays} / ${attendanceDays}</td>
+            <td>${attendancePercentage}%</td>
+        </tr>`;
+    });
+
+    tableHTML += `</table>`;
+    membersInfoDiv.innerHTML = tableHTML;
+}
+
+function generateCharts(teamName) {
+    const members = teamMembers[teamName];
+    const attendanceCounts = {
+        present: 0,
+        absent: 0,
+        holiday: 0,
+    };
+
+    members.forEach(member => {
+        member.attendance.forEach(day => {
+            if (day === 1) attendanceCounts.present++;
+            else if (day === 0) attendanceCounts.absent++;
+            else attendanceCounts.holiday++;
+        });
+    });
+
+    const attendancePieChartCtx = document.getElementById('attendancePieChart').getContext('2d');
+    const attendancePieChart = new Chart(attendancePieChartCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Present', 'Absent', 'Holiday'],
+            datasets: [{
+                data: [attendanceCounts.present, attendanceCounts.absent, attendanceCounts.holiday],
+                backgroundColor: ['#28a745', '#dc3545', '#007bff'],
+            }]
+        }
+    });
+
+    const attendanceLineChartCtx = document.getElementById('attendanceLineChart').getContext('2d');
+    const labels = Array.from({length: 30}, (_, i) => `Day ${i + 1}`);
+    const data = members.flatMap(member => member.attendance);
+
+    const attendanceLineChart = new Chart(attendanceLineChartCtx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Attendance',
+                data: data,
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.2)',
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Days'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Attendance'
+                    },
+                    min: 0,
+                    max: 1,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+}
+
+    </script>
+</body>
+
+</html>
